@@ -81,8 +81,6 @@ Once the application is running, you can:
 ## Configuration
 Additional configuration options can be managed through the .env file and other configuration files within the project. Ensure you have correctly set up machine learning models for crop recommendations and disease prediction.
 
-## Contact
-For any questions, please contact: meghanavjiet@gmail.com
 
 ## Output
 The application will provide farmers with real-time crop recommendations, market insights, disease predictions, and weather updates, all visualized through an easy-to-understand interface.
