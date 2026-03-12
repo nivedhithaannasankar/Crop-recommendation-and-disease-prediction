@@ -500,7 +500,7 @@ const FrontPage = () => {
   </motion.div>
 </div>
 
-{/* Heading for Videos */}
+{/* Heading for Videos 
 <h2 className="text-center mb-4">Latest Agriculture Videos</h2>
 <div className="row mt-5">
   <div className="col-md-4">
@@ -540,12 +540,12 @@ const FrontPage = () => {
     </a>
   </div>
 </div>
-
+*/}
 {/* Heading for Government Schemes */}
 <h2 className="text-center mb-4" style={{ color: '#2d6a4f', fontSize: '2rem' }}>Government Schemes for Farmers</h2>
 <div className="row mt-5">
   <div className="col-md-4">
-    <a href="https://www.india.gov.in/topics/agriculture" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+    <a href="https://www.india.gov.in/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
       <div className="card h-100" style={{ border: '2px solid #4a7c40', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
         <div className="card-body" style={{ backgroundColor: '#f0f8f4' }}>
           <h5 className="card-title" style={{ color: '#2d6a4f', fontSize: '1.25rem', marginBottom: '0' }}>Government Schemes for Agriculture</h5>

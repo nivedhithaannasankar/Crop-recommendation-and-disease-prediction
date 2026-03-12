@@ -1,63 +1,142 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from imblearn.over_sampling import SMOTE  # Import SMOTE
-import pickle
+# import pandas as pd
+# from sklearn.model_selection import train_test_split
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# from imblearn.over_sampling import SMOTE  # Import SMOTE
+# import pickle
 
-# Sample data (replace this with your actual dataset)
-data = {
-    'Nitrogen': [10, 20, 30],
-    'Phosphorus': [20, 30, 10],
-    'Potassium': [30, 10, 20],
-    'Temperature': [25, 30, 20],
-    'Humidity': [80, 70, 60],
-    'Ph': [6.5, 6.0, 7.0],
-    'Rainfall': [200, 150, 300],
-    'Crop': [1, 2, 1]  # Example crop labels
-}
+# # Sample data (replace this with your actual dataset)
+# data = {
+#     'Nitrogen': [10, 20, 30],
+#     'Phosphorus': [20, 30, 10],
+#     'Potassium': [30, 10, 20],
+#     'Temperature': [25, 30, 20],
+#     'Humidity': [80, 70, 60],
+#     'Ph': [6.5, 6.0, 7.0],
+#     'Rainfall': [200, 150, 300],
+#     'Crop': [1, 2, 1]  # Example crop labels
+# }
 
-# Create DataFrame
-df = pd.DataFrame(data)
+# # Create DataFrame
+# df = pd.DataFrame(data)
 
-# Separate features and target
-X = df.drop('Crop', axis=1)
-y = df['Crop']
+# # Separate features and target
+# X = df.drop('Crop', axis=1)
+# y = df['Crop']
 
-# Train-test split (you can adjust the test size as needed)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# # Train-test split (you can adjust the test size as needed)
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Create scalers
-minmax_scaler = MinMaxScaler()
-standard_scaler = StandardScaler()
+# # Create scalers
+# minmax_scaler = MinMaxScaler()
+# standard_scaler = StandardScaler()
 
-# Fit scalers on training data
-minmax_scaler.fit(X_train)
-standard_scaler.fit(X_train)
+# # Fit scalers on training data
+# minmax_scaler.fit(X_train)
+# standard_scaler.fit(X_train)
 
-# Scale the training data
-X_train_minmax = minmax_scaler.transform(X_train)
-X_train_standard = standard_scaler.transform(X_train)
+# # Scale the training data
+# X_train_minmax = minmax_scaler.transform(X_train)
+# X_train_standard = standard_scaler.transform(X_train)
 
-# Apply SMOTE to handle class imbalance
-smote = SMOTE(random_state=42)  # You can set a random state for reproducibility
-X_resampled, y_resampled = smote.fit_resample(X_train_minmax, y_train)
+# # Apply SMOTE to handle class imbalance
+# smote = SMOTE(random_state=42)  # You can set a random state for reproducibility
+# X_resampled, y_resampled = smote.fit_resample(X_train_minmax, y_train)
 
-# Create and fit the model using the resampled data
-model = DecisionTreeClassifier()
-model.fit(X_resampled, y_resampled)
+# # Create and fit the model using the resampled data
+# model = DecisionTreeClassifier()
+# model.fit(X_resampled, y_resampled)
 
-# # Save the model and scalers
+# # # Save the model and scalers
+# # with open('model.pkl', 'wb') as model_file:
+# #     pickle.dump(model, model_file)
+
 # with open('model.pkl', 'wb') as model_file:
 #     pickle.dump(model, model_file)
 
-with open('model.pkl', 'wb') as model_file:
-    pickle.dump(model, model_file)
+# with open('minmax_scaler.pkl', 'wb') as minmax_file:
+#     pickle.dump(minmax_scaler, minmax_file)
 
-with open('minmax_scaler.pkl', 'wb') as minmax_file:
-    pickle.dump(minmax_scaler, minmax_file)
+# with open('standard_scaler.pkl', 'wb') as standard_file:
+#     pickle.dump(standard_scaler, standard_file)
 
-with open('standard_scaler.pkl', 'wb') as standard_file:
-    pickle.dump(standard_scaler, standard_file)
+# print("Model and scalers trained and saved successfully.")
 
-print("Model and scalers trained and saved successfully.")
+
+# train_model.py
+# train_model.py
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.ensemble import RandomForestClassifier
+from imblearn.over_sampling import SMOTE
+import pickle
+
+# -----------------------------
+# Step 1: Load your dataset
+# -----------------------------
+# Make sure your CSV has columns: N,P,K,temperature,humidity,ph,rainfall,label
+df = pd.read_csv('Crop_recommendation.csv')
+
+# -----------------------------
+# Step 2: Encode crop names to integers
+# -----------------------------
+crop_dict = {
+    'rice': 1, 'maize': 2, 'jute': 3, 'cotton': 4, 'coconut': 5, 'papaya': 6, 'orange': 7,
+    'apple': 8, 'muskmelon': 9, 'watermelon': 10, 'grapes': 11, 'mango': 12, 'banana': 13,
+    'pomegranate': 14, 'lentil': 15, 'blackgram': 16, 'mungbean': 17, 'mothbeans': 18,
+    'pigeonpeas': 19, 'kidneybeans': 20, 'chickpea': 21, 'coffee': 22
+}
+df['Crop'] = df['label'].map(crop_dict)
+
+# -----------------------------
+# Step 3: Separate features and target
+# -----------------------------
+X = df[['N','P','K','temperature','humidity','ph','rainfall']]
+y = df['Crop']
+
+# -----------------------------
+# Step 4: Train-test split
+# -----------------------------
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# -----------------------------
+# Step 5: Scale features
+# -----------------------------
+scaler = MinMaxScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# -----------------------------
+# Step 6: Handle class imbalance using SMOTE
+# -----------------------------
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train_scaled, y_train)
+
+# -----------------------------
+# Step 7: Train the model using RandomForest
+# -----------------------------
+model = RandomForestClassifier(
+    n_estimators=200, 
+    max_depth=None, 
+    random_state=42, 
+    n_jobs=-1
+)
+model.fit(X_resampled, y_resampled)
+
+# -----------------------------
+# Step 8: Evaluate model (optional)
+# -----------------------------
+accuracy = model.score(X_test_scaled, y_test)
+print(f"Model accuracy on test data: {accuracy:.2f}")
+
+# -----------------------------
+# Step 9: Save model and scaler
+# -----------------------------
+with open('model.pkl', 'wb') as f:
+    pickle.dump(model, f)
+
+with open('scaler.pkl', 'wb') as f:
+    pickle.dump(scaler, f)
+
+print("Model and scaler saved successfully!")
